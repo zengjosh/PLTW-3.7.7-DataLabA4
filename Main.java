@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Arrays;
+import java.lang.Math; 
 
 public class Main {
   public static void main(String[] args) {
@@ -29,22 +30,22 @@ public class Main {
     }
 
     XYChart chart = new XYChartBuilder()
-      .width(1000)  // Increased width
+      .width(1000) 
       .height(600)  
       .title("Average Rating vs Number of Turns")
       .xAxisTitle("Average Rating")
       .yAxisTitle("Number of Turns")
       .build();
 
-    // Customize Chart
+    // Customizing chart
     chart.getStyler().setDefaultSeriesRenderStyle(XYSeries.XYSeriesRenderStyle.Scatter);
     chart.getStyler().setChartTitleVisible(true);
-    chart.getStyler().setMarkerSize(5);  // Smaller marker size
+    chart.getStyler().setMarkerSize(5); 
     
     chart.getStyler().setPlotMargin(0);
     chart.getStyler().setPlotContentSize(.95);
 
-    // Add series
+    // Add data points
     XYSeries series = chart.addSeries("Chess Games", ratingI, turnsI);
     series.setMarker(SeriesMarkers.CIRCLE);
     series.setMarkerColor(java.awt.Color.BLUE);
@@ -55,26 +56,25 @@ public class Main {
     // Show the chart
     new SwingWrapper(chart).displayChart();
 
+    
     SimpleRegression regression = new SimpleRegression();
 
-    // Assuming ratingI and turnsI are populated and have the same size
     for (int i = 0; i < ratingI.size(); i++) {
         regression.addData(ratingI.get(i), turnsI.get(i));
     }
-
-    // Output the regression results
-    System.out.println("Intercept: " + regression.getIntercept());
-    System.out.println("Slope: " + regression.getSlope());
-
+    
     // Retrieve the intercept (a) and slope (b) of the regression line
     double intercept = regression.getIntercept();
     double slope = regression.getSlope();
 
+    System.out.println("Intercept: " + intercept);
+    System.out.println("Slope: " + slope);
+
     // Output the regression equation
     System.out.println("The best fit line is: y = " + intercept + " + " + slope + "x");
 
-    // If you also want to provide the R-squared value to indicate the fit quality:
-    System.out.println("R-squared: " + regression.getRSquare());
-
+    System.out.println("Coefficient of Determination(r^2): " + regression.getRSquare());
+    System.out.println("Coefficient of Correlation(r): " + Math.sqrt(regression.getRSquare()));
+    System.out.println("Number of data points: " + turnsI.size());
   }
 }
